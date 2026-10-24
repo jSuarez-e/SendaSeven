@@ -17,6 +17,7 @@ import {
   IVoteSubmissionPayload,
 } from '@shared/models/vote.interface';
 import { IVotingQueueSummary } from '@shared/models/voting-queue.interface';
+import { environment } from '../../../environments/environment';
 
 /**
  * Servicio de integracion HTTP con los endpoints del backend.
@@ -29,7 +30,7 @@ export class ApiService {
   private readonly httpClient = inject(HttpClient);
 
   /** URL base para la comunicacion con la API REST. */
-  private readonly baseUrl = 'http://localhost:3000/api';
+  private readonly baseUrl = environment.apiUrl;
 
   /**
    * Autentica al usuario mediante su documento pre-cargado.
