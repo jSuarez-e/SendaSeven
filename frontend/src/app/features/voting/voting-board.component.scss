@@ -1,0 +1,175 @@
+/**
+ * @sdd
+ * [Objetivo]: Estilos BEM mobile-first para el tablero de votacion VotingBoardComponent.
+ * [I/O - Reusabilidad]: Bloque .voting-board con grid mobile-first fluido, banners adaptativos y espaciado touch.
+ * [Edge Cases - UI]: Padding inferior dinamico para evitar solapamiento con la barra de confirmacion fija (StickyConfirmBar).
+ */
+
+.voting-board {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 12px 140px;
+  box-sizing: border-box;
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  &__welcome {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #1a237e;
+    margin: 0;
+    line-height: 1.25;
+  }
+
+  &__subtitle {
+    font-size: 0.85rem;
+    color: #616161;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  &__counter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    background-color: #f5f5f5;
+    padding: 8px 12px;
+    border-radius: 8px;
+  }
+
+  &__counter-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #424242;
+  }
+
+  &__counter-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    background-color: #e8eaf6;
+    color: #283593;
+    font-size: 0.9rem;
+    font-weight: 800;
+    border: 1px solid #c5cae9;
+
+    &--complete {
+      background-color: #e0f2f1;
+      color: #004d40;
+      border-color: #80cbc4;
+    }
+  }
+
+  &__banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.35;
+
+    &--success {
+      background-color: #e8f5e9;
+      color: #1b5e20;
+      border-left: 4px solid #2e7d32;
+    }
+
+    &--error {
+      background-color: #ffebee;
+      color: #c62828;
+      border-left: 4px solid #c62828;
+    }
+
+    &--info {
+      background-color: #e8eaf6;
+      color: #1a237e;
+      border-left: 4px solid #3f51b5;
+    }
+
+    span {
+      flex: 1;
+      overflow-wrap: break-word;
+    }
+  }
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    min-height: 250px;
+    color: #757575;
+    font-size: 0.95rem;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+
+// Tablet Progressive Enhancement (600px+)
+@media (width >= 600px) {
+  .voting-board {
+    padding: 20px 16px 140px;
+
+    &__header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+    }
+
+    &__title {
+      font-size: 1.5rem;
+    }
+
+    &__counter {
+      width: auto;
+      background-color: transparent;
+      padding: 0;
+    }
+
+    &__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+  }
+}
+
+// Desktop Progressive Enhancement (960px+)
+@media (width >= 960px) {
+  .voting-board {
+    padding: 24px 20px 140px;
+
+    &__title {
+      font-size: 1.65rem;
+    }
+
+    &__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+  }
+}

@@ -1,0 +1,236 @@
+/**
+ * @sdd
+ * [Objetivo]: Estilos BEM y tematizacion visual para el componente de tarjeta de ruta RouteCardComponent.
+ * [I/O - Reusabilidad]: Clases modificadoras .route-card--[available|selected|voted-by-me|locked-exclusion|locked-full|locked-max-selected].
+ * [Edge Cases - UI]: Modos desactivados con cursor not-allowed, transiciones suaves de borde y estados de badge.
+ */
+
+.route-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.25s ease-in-out;
+  overflow: hidden;
+  height: 100%;
+  box-sizing: border-box;
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 16px 8px;
+  }
+
+  &__day-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 48px;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    line-height: 1.1;
+  }
+
+  &__day-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #757575;
+  }
+
+  &__day-number {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #212121;
+  }
+
+  &__title-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+
+  &__title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a237e;
+    margin: 0;
+  }
+
+  &__status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    width: fit-content;
+
+    &--available {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    &--selected {
+      background-color: #e0f2f1;
+      color: #00695c;
+      font-weight: 700;
+    }
+
+    &--voted {
+      background-color: #e8f5e9;
+      color: #1b5e20;
+      border: 1px solid #81c784;
+    }
+
+    &--exclusion {
+      background-color: #fff8e1;
+      color: #b78103;
+      border: 1px solid #ffe082;
+    }
+
+    &--full {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+
+    &--max {
+      background-color: #f5f5f5;
+      color: #757575;
+    }
+  }
+
+  &__badge-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+
+  &__content {
+    padding: 8px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__capacity {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__capacity-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #616161;
+  }
+
+  &__progress-bar {
+    height: 6px;
+    border-radius: 3px;
+  }
+
+  &__alert {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #fffde7;
+    border-left: 3px solid #fbc02d;
+    padding: 6px 8px;
+    border-radius: 4px;
+  }
+
+  &__alert-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: #f57f17;
+  }
+
+  &__alert-text {
+    font-size: 0.75rem;
+    color: #5d4037;
+    font-weight: 500;
+  }
+
+  &__actions {
+    padding: 8px 16px 16px;
+    display: flex;
+    justify-content: stretch;
+  }
+
+  &__button {
+    width: 100%;
+    min-height: 44px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border-radius: 8px;
+
+    &--selected {
+      background-color: #00796b;
+      color: #fff;
+    }
+  }
+
+  // Modificadores de estado visual
+  &--available {
+    background-color: #fff;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgb(0 0 0 / 8%);
+      border-color: #b0bec5;
+    }
+  }
+
+  &--selected {
+    background-color: #f0fdf4;
+    border: 2px solid #00897b;
+    box-shadow: 0 4px 14px rgb(0 137 123 / 20%);
+
+    .route-card__day-badge {
+      background-color: #00897b;
+      border-color: #00796b;
+
+      .route-card__day-label,
+      .route-card__day-number {
+        color: #fff;
+      }
+    }
+  }
+
+  &--voted-by-me {
+    background-color: #f1f8e9;
+    border: 2px solid #7cb342;
+  }
+
+  &--locked-exclusion {
+    background-color: #fffde7;
+    border: 1px dashed #fbc02d;
+    opacity: 0.9;
+  }
+
+  &--locked-full {
+    background-color: #fafafa;
+    border: 1px solid #ef9a9a;
+    opacity: 0.8;
+    cursor: not-allowed;
+  }
+
+  &--locked-max-selected {
+    background-color: #fafafa;
+    border: 1px solid #e0e0e0;
+    opacity: 0.65;
+  }
+}

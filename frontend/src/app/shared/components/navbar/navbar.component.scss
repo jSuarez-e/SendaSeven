@@ -1,0 +1,333 @@
+/**
+ * @sdd
+ * [Objetivo]: Estilos BEM mobile-first para la barra de navegacion NavbarComponent.
+ * [I/O - Reusabilidad]: Bloque .navbar con soporte touch, emblema corporativo, navegacion por tabs e insignia de usuario integrada.
+ * [Edge Cases - UI]: Adaptacion fluida para smartphones (320px+), tablets (600px+) y desktop (960px+) con centrado vertical estricto.
+ */
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #fff;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 6%);
+  padding: 0 10px;
+  min-height: 56px;
+  width: 100%;
+  box-sizing: border-box;
+
+  &__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  &__brand-emblem {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgb(37 99 235 / 30%);
+    flex-shrink: 0;
+  }
+
+  &__brand-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: #fff;
+  }
+
+  &__brand-title {
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: #1e3a8a;
+    letter-spacing: -0.2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 110px;
+  }
+
+  &__navigation {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 38px;
+    height: 38px;
+    padding: 0 8px;
+    border-radius: 20px;
+    color: #475569;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: #f1f5f9;
+      color: #1e293b;
+    }
+
+    &--active {
+      background-color: #e0e7ff;
+      color: #1e40af;
+      font-weight: 700;
+
+      .navbar__link-icon {
+        color: #1e40af;
+      }
+    }
+  }
+
+  &__link-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  &__link-label {
+    display: none;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  &__user-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 2px 6px 2px 3px;
+    height: 32px;
+    box-sizing: border-box;
+    max-width: 140px;
+  }
+
+  &__user-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__user-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    line-height: 1.15;
+  }
+
+  &__user-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #1e293b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__user-fullname,
+  &__user-doc {
+    display: none;
+  }
+
+  &__logout-button {
+    background: none;
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #94a3b8;
+    padding: 0;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: #fee2e2;
+      color: #dc2626;
+    }
+  }
+
+  &__logout-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  &__login-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 0 12px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border-radius: 8px;
+  }
+
+  &__login-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  &__login-label {
+    font-size: 0.82rem;
+  }
+}
+
+// Tablet and Desktop Progressive Enhancement (600px+)
+@media (width >= 600px) {
+  .navbar {
+    padding: 0 20px;
+    min-height: 64px;
+    height: 64px;
+
+    &__brand {
+      gap: 10px;
+    }
+
+    &__brand-emblem {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+    }
+
+    &__brand-icon {
+      font-size: 22px;
+      width: 22px;
+      height: 22px;
+    }
+
+    &__brand-title {
+      font-size: 1.15rem;
+      letter-spacing: -0.3px;
+      max-width: none;
+    }
+
+    &__navigation {
+      gap: 8px;
+    }
+
+    &__link {
+      padding: 0 14px;
+      min-width: auto;
+      height: 40px;
+    }
+
+    &__link-label {
+      display: inline;
+      font-size: 0.9rem;
+    }
+
+    &__actions {
+      gap: 12px;
+    }
+
+    &__user-pill {
+      max-width: 280px;
+      height: 36px;
+      padding: 2px 8px 2px 4px;
+      gap: 8px;
+      border-radius: 18px;
+    }
+
+    &__user-avatar {
+      width: 28px;
+      height: 28px;
+      font-size: 0.8rem;
+    }
+
+    &__user-name {
+      display: none;
+    }
+
+    &__user-fullname {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #1e293b;
+      line-height: 1.15;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 160px;
+    }
+
+    &__user-doc {
+      display: block;
+      font-size: 0.65rem;
+      color: #64748b;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+
+    &__logout-button {
+      width: 26px;
+      height: 26px;
+    }
+
+    &__logout-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+
+    &__login-link {
+      min-height: 40px;
+      padding: 0 16px;
+      font-size: 0.9rem;
+    }
+
+    &__login-label {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+// Wide Desktop (960px+)
+@media (width >= 960px) {
+  .navbar {
+    padding: 0 28px;
+  }
+}

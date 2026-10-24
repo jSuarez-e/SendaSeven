@@ -1,0 +1,74 @@
+<div class="attendees-dialog">
+  <div class="attendees-dialog__header">
+    <div class="attendees-dialog__title-group">
+      <span class="attendees-dialog__badge">Día {{ report.dayNumber }}</span>
+      <h2 mat-dialog-title class="attendees-dialog__title">
+        {{ report.name }}
+      </h2>
+    </div>
+
+    <div class="attendees-dialog__meta">
+      <span class="attendees-dialog__capacity">
+        Inscritos: <strong>{{ report.occupiedSeats }}</strong> / {{ report.maxCapacity }}
+      </span>
+    </div>
+  </div>
+
+  <mat-dialog-content class="attendees-dialog__content">
+    @if (report.attendees.length === 0) {
+      <div class="attendees-dialog__empty">
+        <mat-icon class="attendees-dialog__empty-icon">person_off</mat-icon>
+        <p class="attendees-dialog__empty-text">
+          No hay personas inscritas aún en esta ruta turística.
+        </p>
+      </div>
+    } @else {
+      <div class="attendees-dialog__table-wrapper">
+        <table mat-table [dataSource]="report.attendees" class="attendees-dialog__table">
+          <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef class="attendees-dialog__col-index">#</th>
+            <td mat-cell *matCellDef="let attendee; let itemIndex = index" class="attendees-dialog__col-index">
+              {{ itemIndex + 1 }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="documentId">
+            <th mat-header-cell *matHeaderCellDef class="attendees-dialog__col-doc">Documento</th>
+            <td mat-cell *matCellDef="let attendee" class="attendees-dialog__col-doc">
+              <span class="attendees-dialog__doc-pill">{{ attendee.documentId }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="fullName">
+            <th mat-header-cell *matHeaderCellDef class="attendees-dialog__col-name">Nombre Completo</th>
+            <td mat-cell *matCellDef="let attendee" class="attendees-dialog__col-name">
+              {{ attendee.fullName }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="confirmedAt">
+            <th mat-header-cell *matHeaderCellDef class="attendees-dialog__col-date">Fecha de Registro</th>
+            <td mat-cell *matCellDef="let attendee" class="attendees-dialog__col-date">
+              {{ attendee.confirmedAt | date: 'dd/MM/yyyy, HH:mm' }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="attendees-dialog__actions">
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="onClose()"
+      class="attendees-dialog__close-btn"
+    >
+      <mat-icon>close</mat-icon>
+      <span>Cerrar</span>
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -1,0 +1,140 @@
+<section class="results-page">
+  <header class="results-page__header">
+    <div class="results-page__title-box">
+      <h1 class="results-page__title">Resultados de la selección de Rutas.</h1>
+      <p class="results-page__subtitle">
+        Estado de ocupación de cupos y disponibilidad en tiempo real.
+      </p>
+    </div>
+
+    <div class="results-page__actions">
+      @if (state.isAdmin()) {
+        <span class="results-page__admin-badge">
+          <mat-icon>verified_user</mat-icon>
+          <span>Auditoría Habilitada</span>
+        </span>
+
+        <button
+          mat-flat-button
+          (click)="onExportExcel()"
+          [disabled]="isExporting() || state.isLoading()"
+          class="results-page__export-btn"
+          aria-label="Exportar consolidado de inscripciones a Excel"
+        >
+          <span class="results-page__export-content">
+            @if (isExporting()) {
+              <mat-spinner diameter="18" class="results-page__export-spinner"></mat-spinner>
+              <span>Exportando...</span>
+            } @else {
+              <mat-icon>table_view</mat-icon>
+              <span>Exportar Excel</span>
+            }
+          </span>
+        </button>
+      }
+
+      <button
+        mat-stroked-button
+        color="primary"
+        (click)="onRefresh()"
+        [disabled]="state.isLoading()"
+        class="results-page__refresh-btn"
+      >
+        <mat-icon>refresh</mat-icon>
+        <span>Actualizar</span>
+      </button>
+
+      <a mat-raised-button color="primary" routerLink="/votar" class="results-page__vote-btn">
+        <mat-icon>how_to_vote</mat-icon>
+        <span>Ir a Votar</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="results-page__overview">
+    <mat-card class="results-page__stat-card">
+      <span class="results-page__stat-label">Total Cupos Ocupados</span>
+      <span class="results-page__stat-value">{{ totalOccupied() }}</span>
+      <span class="results-page__stat-sub">de {{ totalCapacity() }} cupos totales</span>
+    </mat-card>
+
+    <mat-card class="results-page__stat-card">
+      <span class="results-page__stat-label">Rutas con Cupo Lleno</span>
+      <span class="results-page__stat-value results-page__stat-value--warning">
+        {{ state.routes().filter((r) => r.occupiedSeats >= r.maxCapacity).length }}
+      </span>
+      <span class="results-page__stat-sub">de 12 rutas oficiales</span>
+    </mat-card>
+
+    <mat-card class="results-page__stat-card">
+      <span class="results-page__stat-label">Rutas Aún Disponibles</span>
+      <span class="results-page__stat-value results-page__stat-value--success">
+        {{ state.routes().filter((r) => r.occupiedSeats < r.maxCapacity).length }}
+      </span>
+      <span class="results-page__stat-sub">admiten votación</span>
+    </mat-card>
+  </div>
+
+  @if (state.isLoading() && state.routes().length === 0) {
+    <div class="results-page__loading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <span>Cargando datos en vivo...</span>
+    </div>
+  } @else {
+    <div class="results-page__grid">
+      @for (route of state.routes(); track route.id) {
+        <mat-card
+          class="results-card"
+          [class.results-card--full]="route.occupiedSeats >= route.maxCapacity"
+        >
+          <div class="results-card__header">
+            <div class="results-card__site">
+              <span class="results-card__day">Día {{ route.dayNumber }}</span>
+              <h2 class="results-card__name">{{ route.name }}</h2>
+            </div>
+
+            @if (route.occupiedSeats >= route.maxCapacity) {
+              <span class="results-card__badge results-card__badge--full">
+                Cupo Completo
+              </span>
+            } @else {
+              <span class="results-card__badge results-card__badge--available">
+                Disponible ({{ route.availableSeats }} libres)
+              </span>
+            }
+          </div>
+
+          <div class="results-card__progress-container">
+            <div class="results-card__progress-info">
+              <span>Ocupación:</span>
+              <span class="results-card__progress-ratio">
+                <strong>{{ route.occupiedSeats }}</strong> / {{ route.maxCapacity }}
+              </span>
+            </div>
+
+            <mat-progress-bar
+              class="results-card__progress-bar"
+              [mode]="'determinate'"
+              [value]="calcProgressPercent(route)"
+            ></mat-progress-bar>
+          </div>
+
+          @if (state.isAdmin()) {
+            <div class="results-card__admin-actions">
+              <button
+                mat-stroked-button
+                color="primary"
+                class="results-card__detail-btn"
+                (click)="openAttendeesModal(route)"
+                [attr.aria-label]="'Ver reporte de inscritos en ' + route.name"
+              >
+                <mat-icon>people</mat-icon>
+                <span>Ver Inscritos ({{ route.occupiedSeats }})</span>
+              </button>
+            </div>
+          }
+        </mat-card>
+      }
+    </div>
+  }
+</section>

@@ -1,0 +1,85 @@
+<section class="voting-board">
+  <header class="voting-board__header">
+    <div class="voting-board__welcome">
+      <h1 class="voting-board__title">
+        Bienvenido, {{ state.currentUser()?.fullName ?? 'Votante' }}
+      </h1>
+      <p class="voting-board__subtitle">
+        Selecciona exactamente 2 rutas distintas del catálogo oficial para registrar tu participación.
+      </p>
+    </div>
+
+    <div class="voting-board__counter">
+      <span class="voting-board__counter-label">Seleccionadas:</span>
+      <span
+        class="voting-board__counter-badge"
+        [class.voting-board__counter-badge--complete]="state.selectedCount() === 2"
+      >
+        {{ state.selectedCount() }} de 2
+      </span>
+    </div>
+  </header>
+
+  @if (state.successMessage(); as successMsg) {
+    <div class="voting-board__banner voting-board__banner--success">
+      <mat-icon>check_circle</mat-icon>
+      <span>{{ successMsg }}</span>
+      <button
+        mat-icon-button
+        (click)="state.clearMessages()"
+        aria-label="Cerrar notificación"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  }
+
+  @if (state.errorMessage(); as errorMsg) {
+    <div class="voting-board__banner voting-board__banner--error">
+      <mat-icon>error</mat-icon>
+      <span>{{ errorMsg }}</span>
+      <button
+        mat-icon-button
+        (click)="state.clearMessages()"
+        aria-label="Cerrar notificación"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  }
+
+  @if (state.hasVoted()) {
+    <div class="voting-board__banner voting-board__banner--info">
+      <mat-icon>task_alt</mat-icon>
+      <span>
+        Ya has ejercido tu derecho al voto. Tus rutas confirmadas aparecen destacadas.
+      </span>
+    </div>
+  }
+
+  @if (state.isLoading() && state.routes().length === 0) {
+    <div class="voting-board__loading">
+      <mat-spinner diameter="48"></mat-spinner>
+      <span>Cargando catálogo oficial de rutas...</span>
+    </div>
+  } @else {
+    <main class="voting-board__grid">
+      @for (card of state.cardViewModels(); track card.id) {
+        <app-route-card
+          [viewModel]="card"
+          (selectRoute)="onToggleRoute($event)"
+        ></app-route-card>
+      }
+    </main>
+  }
+
+  @if (!state.hasVoted()) {
+    <app-sticky-confirm-bar
+      [selectedRoutes]="selectedCards()"
+      [canConfirm]="state.canConfirm()"
+      [isLoading]="state.isLoading()"
+      (confirm)="onConfirmVotes()"
+      (removeRoute)="onToggleRoute($event)"
+    ></app-sticky-confirm-bar>
+  }
+</section>

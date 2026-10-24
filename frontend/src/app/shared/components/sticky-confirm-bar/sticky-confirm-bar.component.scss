@@ -1,0 +1,205 @@
+/**
+ * @sdd
+ * [Objetivo]: Estilos BEM mobile-first para la barra fija inferior StickyConfirmBarComponent.
+ * [I/O - Reusabilidad]: Bloque .confirm-bar mobile-first fijo en la parte inferior con soporte para area segura (safe-area).
+ * [Edge Cases - UI]: Chips de rutas seleccionadas con scroll horizontal suave en movil y boton full-width accesible.
+ */
+
+.confirm-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background-color: #fff;
+  border-top: 1px solid #e0e0e0;
+  box-shadow: 0 -4px 16px rgb(0 0 0 / 12%);
+  padding: 10px 12px;
+  padding-bottom: max(10px, env(safe-area-inset-bottom, 10px));
+  box-sizing: border-box;
+
+  &__container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  &__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  &__count-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 20px;
+    background-color: #e0f2f1;
+    color: #00695c;
+    font-weight: 700;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  &__count-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  &__chips {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow-x: auto;
+  }
+
+  &__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #e8eaf6;
+    color: #1a237e;
+    padding: 4px 8px;
+    border-radius: 16px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1px solid #c5cae9;
+    white-space: nowrap;
+  }
+
+  &__chip-day {
+    background-color: #3f51b5;
+    color: #fff;
+    padding: 1px 5px;
+    border-radius: 10px;
+    font-size: 0.68rem;
+    font-weight: 700;
+  }
+
+  &__chip-name {
+    font-weight: 600;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__chip-remove {
+    background: none;
+    border: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #7986cb;
+
+    &:hover {
+      color: #c62828;
+    }
+  }
+
+  &__chip-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  &__placeholder {
+    font-size: 0.76rem;
+    color: #757575;
+    font-style: italic;
+    line-height: 1.25;
+  }
+
+  &__action {
+    display: flex;
+    width: 100%;
+  }
+
+  &__button {
+    width: 100%;
+    min-height: 48px;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 8px;
+  }
+
+  &__spin {
+    animation: confirm-bar-spin 1.2s infinite linear;
+  }
+}
+
+@keyframes confirm-bar-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Tablet and Desktop Progressive Enhancement (768px+)
+@media (width >= 768px) {
+  .confirm-bar {
+    padding: 12px 24px;
+
+    &__container {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    &__summary {
+      justify-content: flex-start;
+      gap: 16px;
+      width: auto;
+    }
+
+    &__count-badge {
+      font-size: 0.85rem;
+      padding: 6px 12px;
+    }
+
+    &__chip {
+      font-size: 0.82rem;
+      padding: 4px 10px;
+    }
+
+    &__chip-name {
+      max-width: 200px;
+    }
+
+    &__action {
+      width: auto;
+    }
+
+    &__button {
+      width: auto;
+      min-height: 48px;
+      padding: 0 28px;
+    }
+  }
+}

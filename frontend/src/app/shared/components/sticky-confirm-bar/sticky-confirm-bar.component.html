@@ -1,0 +1,54 @@
+<aside class="confirm-bar">
+  <div class="confirm-bar__container">
+    <div class="confirm-bar__summary">
+      <div class="confirm-bar__count-badge">
+        <mat-icon class="confirm-bar__count-icon">how_to_vote</mat-icon>
+        <span class="confirm-bar__count-text">
+          {{ selectedRoutes().length }} / 2 seleccionadas
+        </span>
+      </div>
+
+      <div class="confirm-bar__chips">
+        @for (route of selectedRoutes(); track route.id) {
+          <div class="confirm-bar__chip">
+            <span class="confirm-bar__chip-day">Día {{ route.dayNumber }}</span>
+            <span class="confirm-bar__chip-name">{{ route.name }}</span>
+            <button
+              type="button"
+              class="confirm-bar__chip-remove"
+              (click)="onRemove(route.id)"
+              title="Quitar selección"
+            >
+              <mat-icon class="confirm-bar__chip-icon">cancel</mat-icon>
+            </button>
+          </div>
+        }
+
+        @if (selectedRoutes().length === 0) {
+          <span class="confirm-bar__placeholder">
+            Selecciona 2 rutas del catálogo para habilitar la confirmación.
+          </span>
+        } @else if (selectedRoutes().length === 1) {
+          <span class="confirm-bar__placeholder">
+            Te falta 1 ruta por seleccionar.
+          </span>
+        }
+      </div>
+    </div>
+
+    <div class="confirm-bar__action">
+      <button
+        mat-raised-button
+        color="primary"
+        class="confirm-bar__button"
+        [disabled]="!canConfirm() || isLoading()"
+        (click)="onConfirm()"
+      >
+        <mat-icon [class.confirm-bar__spin]="isLoading()">
+          {{ isLoading() ? 'autorenew' : 'check_circle' }}
+        </mat-icon>
+        <span>{{ isLoading() ? 'Confirmando...' : 'Confirmar mis rutas' }}</span>
+      </button>
+    </div>
+  </div>
+</aside>

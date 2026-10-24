@@ -1,0 +1,144 @@
+<mat-card class="route-card" [class]="statusModifierClass()">
+  <mat-card-header class="route-card__header">
+    <div class="route-card__day-badge">
+      <span class="route-card__day-label">Día</span>
+      <span class="route-card__day-number">{{ viewModel().dayNumber }}</span>
+    </div>
+
+    <div class="route-card__title-container">
+      <mat-card-title class="route-card__title">
+        {{ viewModel().name }}
+      </mat-card-title>
+
+      @switch (viewModel().visualStatus) {
+        @case ('SELECTED') {
+          <span class="route-card__status-badge route-card__status-badge--selected">
+            <mat-icon class="route-card__badge-icon">check_circle</mat-icon>
+            <span>Seleccionada (Opción {{ viewModel().selectionOrder }})</span>
+          </span>
+        }
+        @case ('VOTED_BY_ME') {
+          <span class="route-card__status-badge route-card__status-badge--voted">
+            <mat-icon class="route-card__badge-icon">verified</mat-icon>
+            <span>Tu Ruta Confirmada</span>
+          </span>
+        }
+        @case ('LOCKED_EXCLUSION') {
+          <span class="route-card__status-badge route-card__status-badge--exclusion">
+            <mat-icon class="route-card__badge-icon">lock</mat-icon>
+            <span>Excluida por Villanueva / Barichara</span>
+          </span>
+        }
+        @case ('LOCKED_FULL') {
+          <span class="route-card__status-badge route-card__status-badge--full">
+            <mat-icon class="route-card__badge-icon">block</mat-icon>
+            <span>Cupo Lleno (7/7)</span>
+          </span>
+        }
+        @case ('LOCKED_MAX_SELECTED') {
+          <span class="route-card__status-badge route-card__status-badge--max">
+            <mat-icon class="route-card__badge-icon">pause_circle</mat-icon>
+            <span>Límite de 2 Selecciones</span>
+          </span>
+        }
+        @default {
+          <span class="route-card__status-badge route-card__status-badge--available">
+            <mat-icon class="route-card__badge-icon">event_available</mat-icon>
+            <span>Disponible</span>
+          </span>
+        }
+      }
+    </div>
+  </mat-card-header>
+
+  <mat-card-content class="route-card__content">
+    <div class="route-card__capacity">
+      <div class="route-card__capacity-info">
+        <span class="route-card__capacity-label">Capacidad de cupos:</span>
+        <span class="route-card__capacity-value">
+          <strong>{{ viewModel().occupiedSeats }}</strong> / {{ viewModel().maxCapacity }}
+        </span>
+      </div>
+
+      <mat-progress-bar
+        class="route-card__progress-bar"
+        [mode]="'determinate'"
+        [value]="progressPercent()"
+      ></mat-progress-bar>
+    </div>
+
+    @if (viewModel().exclusionMessage; as message) {
+      <div class="route-card__alert">
+        <mat-icon class="route-card__alert-icon">info</mat-icon>
+        <span class="route-card__alert-text">{{ message }}</span>
+      </div>
+    }
+  </mat-card-content>
+
+  <mat-card-actions class="route-card__actions">
+    @switch (viewModel().visualStatus) {
+      @case ('SELECTED') {
+        <button
+          mat-flat-button
+          color="accent"
+          class="route-card__button route-card__button--selected"
+          (click)="onSelect()"
+        >
+          <mat-icon>close</mat-icon>
+          <span>Desmarcar ruta</span>
+        </button>
+      }
+      @case ('VOTED_BY_ME') {
+        <button
+          mat-stroked-button
+          disabled
+          class="route-card__button route-card__button--voted"
+        >
+          <mat-icon>task_alt</mat-icon>
+          <span>Voto Confirmado</span>
+        </button>
+      }
+      @case ('LOCKED_FULL') {
+        <button
+          mat-stroked-button
+          disabled
+          class="route-card__button route-card__button--disabled"
+        >
+          <mat-icon>do_not_disturb_on</mat-icon>
+          <span>Sin cupos</span>
+        </button>
+      }
+      @case ('LOCKED_EXCLUSION') {
+        <button
+          mat-stroked-button
+          disabled
+          class="route-card__button route-card__button--disabled"
+        >
+          <mat-icon>lock</mat-icon>
+          <span>Bloqueada</span>
+        </button>
+      }
+      @case ('LOCKED_MAX_SELECTED') {
+        <button
+          mat-stroked-button
+          disabled
+          class="route-card__button route-card__button--disabled"
+        >
+          <mat-icon>hourglass_empty</mat-icon>
+          <span>Esperando cupo</span>
+        </button>
+      }
+      @default {
+        <button
+          mat-raised-button
+          color="primary"
+          class="route-card__button route-card__button--action"
+          (click)="onSelect()"
+        >
+          <mat-icon>add_circle_outline</mat-icon>
+          <span>Seleccionar ruta</span>
+        </button>
+      }
+    }
+  </mat-card-actions>
+</mat-card>

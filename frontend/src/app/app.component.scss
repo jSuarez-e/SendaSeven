@@ -1,0 +1,31 @@
+/**
+ * @sdd
+ * [Objetivo]: Estilos encapsulados para el componente raiz App.
+ * [I/O - Reusabilidad]: Bloque BEM .app-root para contenedor principal.
+ * [Edge Cases - UI]: Layout responsive con display block.
+ */
+
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+
+  &__main {
+    flex: 1 1 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+}
+

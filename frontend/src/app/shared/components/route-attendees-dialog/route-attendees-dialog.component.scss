@@ -1,0 +1,189 @@
+/**
+ * @sdd
+ * [Objetivo]: Estilos BEM mobile-first para la ventana modal RouteAttendeesDialogComponent.
+ * [I/O - Reusabilidad]: Bloque .attendees-dialog con tabla responsive deslizable, dimensionamiento fluido y botones touch.
+ * [Edge Cases - UI]: Viewports estrechos (320px), desplazamiento horizontal tactil para tablas y safe-areas.
+ */
+
+.attendees-dialog {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 640px;
+  padding: 4px;
+  box-sizing: border-box;
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px 14px 8px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  &__title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #3f51b5;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #1a237e;
+    line-height: 1.25;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  &__capacity {
+    font-size: 0.8rem;
+    color: #424242;
+    background-color: #f5f5f5;
+    padding: 4px 10px;
+    border-radius: 14px;
+    font-weight: 500;
+  }
+
+  &__content {
+    padding: 14px 0;
+    max-height: 55vh;
+    overflow-y: auto;
+  }
+
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 12px;
+    gap: 10px;
+    color: #757575;
+    text-align: center;
+  }
+
+  &__empty-icon {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+    color: #9e9e9e;
+  }
+
+  &__empty-text {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  &__table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  &__table {
+    width: 100%;
+    min-width: 380px;
+    background-color: transparent;
+  }
+
+  &__col-index {
+    width: 32px;
+    font-weight: 600;
+    color: #757575;
+    text-align: center;
+    padding: 8px 4px;
+  }
+
+  &__col-doc {
+    font-weight: 600;
+    padding: 8px 6px;
+  }
+
+  &__col-name {
+    color: #212121;
+    font-weight: 500;
+    padding: 8px 6px;
+  }
+
+  &__col-date {
+    color: #616161;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    padding: 8px 6px;
+  }
+
+  &__doc-pill {
+    background-color: #e8eaf6;
+    color: #283593;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  &__actions {
+    padding: 10px 14px 6px;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  &__close-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 40px;
+    width: 100%;
+  }
+}
+
+// Tablet and Desktop Progressive Enhancement (600px+)
+@media (width >= 600px) {
+  .attendees-dialog {
+    padding: 8px;
+
+    &__header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px 8px;
+    }
+
+    &__title {
+      font-size: 1.4rem;
+    }
+
+    &__meta {
+      width: auto;
+    }
+
+    &__capacity {
+      font-size: 0.85rem;
+      padding: 6px 12px;
+    }
+
+    &__content {
+      padding: 20px 0;
+      max-height: 420px;
+    }
+
+    &__close-btn {
+      width: auto;
+    }
+  }
+}

@@ -1,0 +1,80 @@
+<mat-toolbar class="navbar">
+  <div class="navbar__brand" routerLink="/">
+    <div class="navbar__brand-emblem">
+      <mat-icon class="navbar__brand-icon">explore</mat-icon>
+    </div>
+    <span class="navbar__brand-title">Rutas Turísticas</span>
+  </div>
+
+  <nav class="navbar__navigation">
+    <a
+      mat-button
+      routerLink="/votar"
+      routerLinkActive="navbar__link--active"
+      class="navbar__link"
+      title="Votar por rutas"
+      aria-label="Votar por rutas"
+    >
+      <mat-icon class="navbar__link-icon">how_to_vote</mat-icon>
+      <span class="navbar__link-label">Votar</span>
+    </a>
+
+    <a
+      mat-button
+      routerLink="/resultados"
+      routerLinkActive="navbar__link--active"
+      class="navbar__link"
+      title="Ver resultados en vivo"
+      aria-label="Ver resultados en vivo"
+    >
+      <mat-icon class="navbar__link-icon">bar_chart</mat-icon>
+      <span class="navbar__link-label">Resultados</span>
+    </a>
+
+    <a
+      mat-button
+      routerLink="/sorteo"
+      routerLinkActive="navbar__link--active"
+      class="navbar__link"
+      title="Sorteo y orden de votación"
+      aria-label="Sorteo y orden de votación"
+    >
+      <mat-icon class="navbar__link-icon">casino</mat-icon>
+      <span class="navbar__link-label">Sorteo</span>
+    </a>
+  </nav>
+
+  <div class="navbar__actions">
+    @if (currentUser(); as user) {
+      <div class="navbar__user-pill" [title]="user.fullName + ' (' + user.documentId + ')'">
+        <span class="navbar__user-avatar">{{ userInitial() }}</span>
+        <div class="navbar__user-details">
+          <span class="navbar__user-name">{{ userFirstName() }}</span>
+          <span class="navbar__user-fullname">{{ user.fullName }}</span>
+          <span class="navbar__user-doc">Doc: {{ user.documentId }}</span>
+        </div>
+        <button
+          type="button"
+          class="navbar__logout-button"
+          (click)="onLogout()"
+          title="Cerrar sesión"
+          aria-label="Cerrar sesión"
+        >
+          <mat-icon class="navbar__logout-icon">logout</mat-icon>
+        </button>
+      </div>
+    } @else {
+      <a
+        mat-flat-button
+        color="primary"
+        routerLink="/acceso"
+        class="navbar__login-link"
+        title="Acceder con documento"
+        aria-label="Acceder con documento"
+      >
+        <mat-icon class="navbar__login-icon">login</mat-icon>
+        <span class="navbar__login-label">Acceder</span>
+      </a>
+    }
+  </div>
+</mat-toolbar>

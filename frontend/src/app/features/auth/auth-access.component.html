@@ -1,0 +1,63 @@
+<section class="auth-page">
+  <mat-card class="auth-card">
+    <mat-card-header class="auth-card__header">
+      <div class="auth-card__icon-badge">
+        <mat-icon class="auth-card__icon">lock_person</mat-icon>
+      </div>
+      <mat-card-title class="auth-card__title">
+        Selección de Rutas
+      </mat-card-title>
+      <mat-card-subtitle class="auth-card__subtitle">
+        Ingresa tu número de documento para acceder al tablero de votación oficial.
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="auth-card__content">
+      @if (state.errorMessage(); as errorMsg) {
+        <div class="auth-card__error-banner">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ errorMsg }}</span>
+        </div>
+      }
+
+      <form (ngSubmit)="onSubmit()" class="auth-card__form">
+        <mat-form-field appearance="outline" class="auth-card__form-field">
+          <mat-label>Documento de Identidad</mat-label>
+          <input
+            matInput
+            type="text"
+            name="documentId"
+            [(ngModel)]="documentIdInput"
+            placeholder="Ej: 1098765432"
+            required
+            autocomplete="off"
+            [disabled]="state.isLoading()"
+          />
+          <mat-icon matPrefix>badge</mat-icon>
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="auth-card__submit-btn"
+          [disabled]="documentIdInput().trim().length === 0 || state.isLoading()"
+        >
+          @if (state.isLoading()) {
+            <mat-spinner diameter="20" class="auth-card__spinner"></mat-spinner>
+          } @else {
+            <mat-icon>arrow_forward</mat-icon>
+          }
+          <span>{{ state.isLoading() ? 'Verificando...' : 'Validar y Continuar' }}</span>
+        </button>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions class="auth-card__actions">
+      <a mat-button routerLink="/resultados" class="auth-card__public-link">
+        <mat-icon>visibility</mat-icon>
+        <span>Ver resultados en vivo sin votar</span>
+      </a>
+    </mat-card-actions>
+  </mat-card>
+</section>

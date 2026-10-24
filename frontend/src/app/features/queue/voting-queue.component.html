@@ -1,0 +1,369 @@
+<main class="voting-queue">
+  <!-- Encabezado de la Seccion -->
+  <header class="voting-queue__header">
+    <div class="voting-queue__header-content">
+      <div class="voting-queue__header-emblem">
+        <mat-icon class="voting-queue__header-icon">casino</mat-icon>
+      </div>
+      <div class="voting-queue__header-titles">
+        <h1 class="voting-queue__title">Sorteo y Turnos de Votación</h1>
+        <p class="voting-queue__subtitle">
+          Orden aleatorio y controlado para el censo de votantes registrados
+        </p>
+      </div>
+    </div>
+
+    <div class="voting-queue__header-actions">
+      <button
+        type="button"
+        mat-stroked-button
+        class="voting-queue__refresh-button"
+        (click)="onRefresh()"
+        [disabled]="queueService.isLoading()"
+        title="Actualizar estado de la cola"
+      >
+        <mat-icon class="voting-queue__btn-icon">sync</mat-icon>
+        <span>Actualizar</span>
+      </button>
+
+      <button
+        type="button"
+        mat-flat-button
+        color="primary"
+        class="voting-queue__draw-button"
+        (click)="onDrawClick()"
+        [disabled]="queueService.isLoading()"
+        title="Generar orden aleatorio de votación"
+      >
+        <span class="voting-queue__btn-label-group">
+          @if (queueService.isLoading()) {
+            <mat-spinner diameter="18" class="voting-queue__btn-spinner"></mat-spinner>
+            <span>Sorteando...</span>
+          } @else {
+            <mat-icon class="voting-queue__btn-icon">shuffle</mat-icon>
+            <span>Realizar Sorteo</span>
+          }
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mensaje de Error si ocurre -->
+  @if (queueService.error(); as errorMessage) {
+    <div class="voting-queue__alert voting-queue__alert--error" role="alert">
+      <mat-icon class="voting-queue__alert-icon">error_outline</mat-icon>
+      <span class="voting-queue__alert-text">{{ errorMessage }}</span>
+    </div>
+  }
+
+  <!-- Banner Hero: Turno Actual Activo -->
+  <section class="voting-queue__hero" aria-label="Turno Actual de Votación">
+    @if (queueService.currentVoter(); as voter) {
+      <div class="voting-queue__hero-card voting-queue__hero-card--active">
+        <div class="voting-queue__hero-badge">
+          <span class="voting-queue__hero-badge-dot"></span>
+          <span>TURNO ACTIVO ACTUAL</span>
+        </div>
+
+        <div class="voting-queue__hero-body">
+          <div class="voting-queue__hero-number-wrapper">
+            <span class="voting-queue__hero-number-prefix">Turno</span>
+            <span class="voting-queue__hero-number">#{{ voter.turnNumber }}</span>
+          </div>
+
+          <div class="voting-queue__hero-info">
+            <h2 class="voting-queue__hero-name">{{ voter.fullName }}</h2>
+            <div class="voting-queue__hero-meta">
+              <span class="voting-queue__hero-doc">
+                <mat-icon class="voting-queue__hero-meta-icon">badge</mat-icon>
+                Documento: {{ voter.documentId }}
+              </span>
+              <span class="voting-queue__hero-status">
+                <mat-icon class="voting-queue__hero-meta-icon">how_to_vote</mat-icon>
+                Habilitado para votar ahora
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="voting-queue__hero-actions">
+          <a
+            mat-flat-button
+            routerLink="/votar"
+            class="voting-queue__hero-vote-btn"
+            title="Ir a emitir voto"
+          >
+            <mat-icon class="voting-queue__btn-icon">check_circle</mat-icon>
+            <span>Ir a Votar</span>
+          </a>
+        </div>
+      </div>
+    } @else if (queueService.totalInQueue() > 0 && queueService.pendingCount() === 0) {
+      <div class="voting-queue__hero-card voting-queue__hero-card--completed">
+        <mat-icon class="voting-queue__hero-completed-icon">celebration</mat-icon>
+        <div class="voting-queue__hero-completed-content">
+          <h2 class="voting-queue__hero-completed-title">¡Votación Completada!</h2>
+          <p class="voting-queue__hero-completed-desc">
+            Todos los {{ queueService.totalInQueue() }} participantes sorteados ya han ejercido su voto con éxito.
+          </p>
+        </div>
+        <a mat-stroked-button routerLink="/resultados" class="voting-queue__hero-results-btn">
+          <mat-icon class="voting-queue__btn-icon">bar_chart</mat-icon>
+          <span>Ver Resultados</span>
+        </a>
+      </div>
+    } @else {
+      <div class="voting-queue__hero-card voting-queue__hero-card--idle">
+        <mat-icon class="voting-queue__hero-idle-icon">hourglass_empty</mat-icon>
+        <div class="voting-queue__hero-idle-content">
+          <h2 class="voting-queue__hero-idle-title">Sorteo Pendiente</h2>
+          <p class="voting-queue__hero-idle-desc">
+            No hay participantes en cola activa o aún no se ha generado el sorteo. Presiona el botón "Realizar Sorteo" para barajar aleatoriamente a los inscritos.
+          </p>
+        </div>
+        <button
+          type="button"
+          mat-flat-button
+          color="primary"
+          class="voting-queue__hero-draw-action"
+          (click)="onDrawClick()"
+          [disabled]="queueService.isLoading()"
+        >
+          <span class="voting-queue__btn-label-group">
+            @if (queueService.isLoading()) {
+              <mat-spinner diameter="18" class="voting-queue__btn-spinner"></mat-spinner>
+              <span>Sorteando...</span>
+            } @else {
+              <mat-icon class="voting-queue__btn-icon">shuffle</mat-icon>
+              <span>Iniciar Sorteo</span>
+            }
+          </span>
+        </button>
+      </div>
+    }
+  </section>
+
+  <!-- Tarjetas de Metricas Generales -->
+  <section class="voting-queue__metrics" aria-label="Métricas del sorteo">
+    <div class="voting-queue__metric-card voting-queue__metric-card--total">
+      <div class="voting-queue__metric-icon-box">
+        <mat-icon class="voting-queue__metric-icon">group</mat-icon>
+      </div>
+      <div class="voting-queue__metric-data">
+        <span class="voting-queue__metric-value">{{ queueService.totalInQueue() }}</span>
+        <span class="voting-queue__metric-label">Total en Sorteo</span>
+      </div>
+    </div>
+
+    <div class="voting-queue__metric-card voting-queue__metric-card--pending">
+      <div class="voting-queue__metric-icon-box">
+        <mat-icon class="voting-queue__metric-icon">schedule</mat-icon>
+      </div>
+      <div class="voting-queue__metric-data">
+        <span class="voting-queue__metric-value">{{ queueService.pendingCount() }}</span>
+        <span class="voting-queue__metric-label">Pendientes</span>
+      </div>
+    </div>
+
+    <div class="voting-queue__metric-card voting-queue__metric-card--voted">
+      <div class="voting-queue__metric-icon-box">
+        <mat-icon class="voting-queue__metric-icon">task_alt</mat-icon>
+      </div>
+      <div class="voting-queue__metric-data">
+        <span class="voting-queue__metric-value">{{ queueService.votedCount() }}</span>
+        <span class="voting-queue__metric-label">Completaron Voto</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Barra de Filtros y Busqueda -->
+  <section class="voting-queue__controls" aria-label="Controles de búsqueda y filtros">
+    <div class="voting-queue__search-box">
+      <mat-icon class="voting-queue__search-icon">search</mat-icon>
+      <input
+        type="text"
+        class="voting-queue__search-input"
+        placeholder="Buscar por cédula, nombre o número de turno..."
+        [ngModel]="searchQuery()"
+        (ngModelChange)="onSearchInput($event)"
+        aria-label="Buscar en la lista de turnos"
+      />
+      @if (searchQuery()) {
+        <button
+          type="button"
+          class="voting-queue__search-clear"
+          (click)="clearSearch()"
+          title="Limpiar búsqueda"
+          aria-label="Limpiar búsqueda"
+        >
+          <mat-icon class="voting-queue__clear-icon">close</mat-icon>
+        </button>
+      }
+    </div>
+
+    <div class="voting-queue__tabs" role="tablist">
+      <button
+        type="button"
+        role="tab"
+        class="voting-queue__tab"
+        [class.voting-queue__tab--active]="activeFilterTab() === 'ALL'"
+        (click)="setFilterTab('ALL')"
+      >
+        <span>Todos</span>
+        <span class="voting-queue__tab-pill">{{ queueService.totalInQueue() }}</span>
+      </button>
+
+      <button
+        type="button"
+        role="tab"
+        class="voting-queue__tab"
+        [class.voting-queue__tab--active]="activeFilterTab() === 'PENDING'"
+        (click)="setFilterTab('PENDING')"
+      >
+        <span>Pendientes</span>
+        <span class="voting-queue__tab-pill voting-queue__tab-pill--pending">
+          {{ queueService.pendingCount() }}
+        </span>
+      </button>
+
+      <button
+        type="button"
+        role="tab"
+        class="voting-queue__tab"
+        [class.voting-queue__tab--active]="activeFilterTab() === 'VOTED'"
+        (click)="setFilterTab('VOTED')"
+      >
+        <span>Votaron</span>
+        <span class="voting-queue__tab-pill voting-queue__tab-pill--voted">
+          {{ queueService.votedCount() }}
+        </span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Listado / Grilla de Turnos -->
+  <section class="voting-queue__list" aria-label="Listado de turnos sorteados">
+    <div class="voting-queue__grid">
+      @for (item of filteredItems(); track item.id) {
+        <article
+          class="voting-queue__card"
+          [class.voting-queue__card--current]="item.turnNumber === queueService.currentTurnNumber()"
+          [class.voting-queue__card--voted]="item.status === 'VOTED'"
+        >
+          <div class="voting-queue__card-badge-container">
+            <span class="voting-queue__card-turn">#{{ item.turnNumber }}</span>
+            @if (item.turnNumber === queueService.currentTurnNumber()) {
+              <span class="voting-queue__card-tag voting-queue__card-tag--active">TURNO ACTUAL</span>
+            } @else if (item.status === 'VOTED') {
+              <span class="voting-queue__card-tag voting-queue__card-tag--voted">
+                <mat-icon class="voting-queue__card-tag-icon">check</mat-icon>
+                VOTÓ
+              </span>
+            } @else {
+              <span class="voting-queue__card-tag voting-queue__card-tag--pending">PENDIENTE</span>
+            }
+          </div>
+
+          <div class="voting-queue__card-content">
+            <h3 class="voting-queue__card-name">{{ item.fullName }}</h3>
+            <p class="voting-queue__card-doc">
+              <mat-icon class="voting-queue__card-doc-icon">badge</mat-icon>
+              <span>C.C. {{ item.documentId }}</span>
+            </p>
+          </div>
+
+          <div class="voting-queue__card-footer">
+            @if (item.status === 'VOTED' && item.votedAt) {
+              <span class="voting-queue__card-date">
+                <mat-icon class="voting-queue__card-date-icon">event_available</mat-icon>
+                Votó: {{ item.votedAt | date:'dd/MM/yyyy HH:mm' }}
+              </span>
+            } @else {
+              <span class="voting-queue__card-pending-text">
+                <mat-icon class="voting-queue__card-date-icon">hourglass_top</mat-icon>
+                Esperando su turno
+              </span>
+            }
+          </div>
+        </article>
+      } @empty {
+        <div class="voting-queue__empty">
+          <mat-icon class="voting-queue__empty-icon">search_off</mat-icon>
+          <h3 class="voting-queue__empty-title">Sin resultados coincidentes</h3>
+          <p class="voting-queue__empty-desc">
+            @if (searchQuery()) {
+              No se encontraron votantes que coincidan con "{{ searchQuery() }}".
+            } @else {
+              No hay participantes en esta categoría.
+            }
+          </p>
+          @if (searchQuery()) {
+            <button
+              type="button"
+              mat-stroked-button
+              class="voting-queue__empty-action"
+              (click)="clearSearch()"
+            >
+              Limpiar búsqueda
+            </button>
+          }
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Modal de Confirmacion para Regenerar Sorteo -->
+  @if (showConfirmDrawDialog()) {
+    <div class="voting-queue__modal-backdrop" (click)="cancelConfirmDraw()">
+      <div
+        class="voting-queue__modal"
+        (click)="$event.stopPropagation()"
+        role="dialog"
+        aria-labelledby="confirm-draw-title"
+        aria-modal="true"
+      >
+        <div class="voting-queue__modal-header">
+          <div class="voting-queue__modal-emblem">
+            <mat-icon class="voting-queue__modal-icon">shuffle</mat-icon>
+          </div>
+          <h2 id="confirm-draw-title" class="voting-queue__modal-title">¿Ejecutar nuevo sorteo?</h2>
+        </div>
+
+        <p class="voting-queue__modal-desc">
+          Ya existen turnos generados. Al realizar un nuevo sorteo:
+        </p>
+
+        <ul class="voting-queue__modal-list">
+          <li class="voting-queue__modal-item">
+            <mat-icon class="voting-queue__modal-check">check_circle</mat-icon>
+            <span>Los usuarios que <strong>ya votaron se mantendrán guardados</strong> y no volverán a salir.</span>
+          </li>
+          <li class="voting-queue__modal-item">
+            <mat-icon class="voting-queue__modal-check">shuffle</mat-icon>
+            <span>Se reordenarán aleatoriamente <strong>únicamente los votantes pendientes</strong>.</span>
+          </li>
+        </ul>
+
+        <div class="voting-queue__modal-actions">
+          <button
+            type="button"
+            mat-button
+            class="voting-queue__modal-cancel"
+            (click)="cancelConfirmDraw()"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            mat-flat-button
+            color="primary"
+            class="voting-queue__modal-confirm"
+            (click)="executeDraw()"
+          >
+            Confirmar y Sortear
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</main>

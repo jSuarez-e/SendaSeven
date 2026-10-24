@@ -1,0 +1,10 @@
+<div class="app-root">
+  <app-navbar
+    [currentUser]="state.currentUser()"
+    (logout)="state.logout()"
+  ></app-navbar>
+
+  <main class="app-root__main">
+    <router-outlet></router-outlet>
+  </main>
+</div>
